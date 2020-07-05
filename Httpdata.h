@@ -87,7 +87,19 @@ class HttpData:public std::enable_shared_from_this<HttpData>
     void handleWrite();
     void handleConn();
     void handleErr(int fd,int err_num,std::string short_msg);
+    URIState parseURI();
+    HeaderState parseHeaders();
+    AnalysisState analyzeRequest();
   private:
+    int fd_;
+    std::map<std::string, std::string> headers_;
+    bool keepAlive_;
+    std::string fileName_;
+    HttpVersion httpVersion_;
+    ParseState hState_;
+    std::string readBuffer_;
+    std::string outBuffer_;
+    HttpMethod method_;
     EventLoop* loop_;
     sp_channel channel_;
     std::weak_ptr<TimerNode> timer_;
